@@ -28,6 +28,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -61,36 +62,33 @@ public class FXMLTabPageSystemConfigController implements Initializable {
     @FXML
     private PasswordField passwordFieldDatabasePass;
 
-    @FXML
     private Label label;
 
-    @FXML
     private TextField textField_SHIP_ID;
 
-    @FXML
     private TextField textField_SHIP_SERVICE;
 
-    @FXML
     private TextArea textArea_SHIP_NAME;
 
-    @FXML
     private TextArea textArea_SHIP_REMARK;
 
     @FXML
     private TextField textFieldShipBaseDir;
 
-    @FXML
     private Label labelEnterCreateShipDir;
 
-    @FXML
     public TextField testTextField;
-
     @FXML
+    private Button SHIP_BASE_DIR;
+    @FXML
+    private Button ButtonEnterSystemProperties;
+    @FXML
+    private Button buttonReloadPropertiesOnMemory;
+
     private void testButtonAction(ActionEvent event) {
 testTextField.setText(String.valueOf(Integer.parseInt(testTextField.getText())*2));
     }
 
-    @FXML
     private void handleButtonAction(ActionEvent event) {
         System.out.println("You clicked me!");
         label.setText(passwordFieldDatabasePass.getText());
@@ -124,7 +122,6 @@ testTextField.setText(String.valueOf(Integer.parseInt(testTextField.getText())*2
 
     
     
-    @FXML
     private void handleButtonEnterCreateShipDirButtonAction(ActionEvent event) {
         ConnectionShip.replaceShip( // データベースを更新。
                 Normalizer.normalize(textField_SHIP_ID.getText(), Normalizer.Form.NFKC), // 全角を限り無く半角に
