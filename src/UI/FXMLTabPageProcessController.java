@@ -30,7 +30,7 @@ import javax.swing.JOptionPane;
 public class FXMLTabPageProcessController implements Initializable {
 
     @FXML
-    private TextField bookUUIDorHumanyCode;
+    private TextField textField_id;
     @FXML
     private TextField shipId;
     @FXML
@@ -47,7 +47,7 @@ public class FXMLTabPageProcessController implements Initializable {
     private Label subTitle;
 
         private void initFocuseConditionForTask() { // 要改善最初に存在確認をしてから編集不可とすべき。
-        this.bookUUIDorHumanyCode.focusedProperty().addListener(new ChangeListener<Boolean>() {
+        this.textField_id.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> arg0,
                     Boolean oldPropertyValue, Boolean newPropertyValue) {
@@ -56,7 +56,7 @@ public class FXMLTabPageProcessController implements Initializable {
                     System.out.println("Textfield on focus");
                 } else {
                     //textField_SHIP_ID.setEditable(false);
-                    bookUUIDorHumanyCode.setDisable(true); // 編集不可になっていることが明確。ただし文字は見にくい。
+                    textField_id.setDisable(true); // 編集不可になっていることが明確。ただし文字は見にくい。
                     System.out.println("Textfield out focus");
                     /*
                     ResultSet rs = DatabaseUty.getResultSetByKey("ship", "id", textField_SHIP_ID.getText().trim());
