@@ -30,24 +30,18 @@ import javax.swing.JOptionPane;
 public class FXMLTabPageProcessController implements Initializable {
 
     @FXML
-    private TextField textField_id;
+    private TextField textFieldId;
     @FXML
-    private TextField shipId;
+    private TextField textFieldArtifactsId;
     @FXML
-    private TextField voyageNumber;
+    private TextArea textAreaDivName;
     @FXML
-    private TextArea tempTitle;
+    private TextArea textAreaComment;
     @FXML
-    private TextArea comment;
-    @FXML
-    private ComboBox<?> divisionByDataAndTime;
-    @FXML
-    private Label shipTitle;
-    @FXML
-    private Label subTitle;
+    private ComboBox<?> comboBoxDivTime;
 
-        private void initFocuseConditionForTask() { // 要改善最初に存在確認をしてから編集不可とすべき。
-        this.textField_id.focusedProperty().addListener(new ChangeListener<Boolean>() {
+    private void initFocuseConditionForTask() { // 要改善最初に存在確認をしてから編集不可とすべき。
+        this.textFieldId.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> arg0,
                     Boolean oldPropertyValue, Boolean newPropertyValue) {
@@ -56,7 +50,7 @@ public class FXMLTabPageProcessController implements Initializable {
                     System.out.println("Textfield on focus");
                 } else {
                     //textField_SHIP_ID.setEditable(false);
-                    textField_id.setDisable(true); // 編集不可になっていることが明確。ただし文字は見にくい。
+                    textFieldId.setDisable(true); // 編集不可になっていることが明確。ただし文字は見にくい。
                     System.out.println("Textfield out focus");
                     /*
                     ResultSet rs = DatabaseUty.getResultSetByKey("ship", "id", textField_SHIP_ID.getText().trim());
@@ -71,19 +65,18 @@ public class FXMLTabPageProcessController implements Initializable {
                         flgExsistShip = false;
                         JOptionPane.showMessageDialog(null, "新規もしくはエラーです");
                     }
-                    */
+                     */
                 }
             }
         });
     }
-    
-    
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        initFocuseConditionForTask(); // 主キーを保護する為にロック。
-    }    
-    
+        initFocuseConditionForTask(); // 主キーを保護する為にロックするイベントを登録。
+    }
+
 }
