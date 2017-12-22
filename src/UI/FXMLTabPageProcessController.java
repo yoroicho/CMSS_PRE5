@@ -6,14 +6,18 @@
 package UI;
 
 import DB.DatabaseUty;
+import DB.ProcessDAO;
+import DB.ProcessDTO;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
@@ -69,6 +73,13 @@ public class FXMLTabPageProcessController implements Initializable {
                 }
             }
         });
+    }
+
+    @FXML
+    private void testButtonAction(ActionEvent event) {
+        List<ProcessDTO> findAll = ProcessDAO.findAll();
+        findAll.forEach(s -> System.out.println(s.getId() + ":"+s.getDivtime().toString()));
+
     }
 
     /**

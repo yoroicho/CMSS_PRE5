@@ -10,6 +10,7 @@ package DB;
  * @author tokyo
  */
 public class SampleDAO {
+    /*
      public List<OrdersDTO> findAll() {
     // DTOクラスのインスタンス格納用
     List<OrdersDTO> ordersDTO = new ArrayList<>();
@@ -57,4 +58,5 @@ public class SampleDAO {
     // DTOクラスのインスタンスのListを返す
     return ordersDTO;
   }
+*/
 }
