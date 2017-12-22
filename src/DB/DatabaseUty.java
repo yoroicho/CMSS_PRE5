@@ -12,6 +12,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,7 +25,8 @@ public class DatabaseUty {
     static final String USERNAME = SystemPropertiesItem.DB_USER;
     static final String PASSWORD = SystemPropertiesItem.DB_PASS;
 
-    public static ResultSet getResultSetByKey(String tableName, String keyName, String id) {
+    
+public static ResultSet getResultSetByKey(String tableName, String keyName, String id) {
         String sql = "SELECT * from " + tableName + " WHERE " + keyName + " = (?);";
 
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
