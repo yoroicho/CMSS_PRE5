@@ -8,6 +8,7 @@ package UI;
 import DB.DatabaseUty;
 import DB.ProcessDAO;
 import DB.ProcessDTO;
+import common.TimestampUtil;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -78,7 +79,11 @@ public class FXMLTabPageProcessController implements Initializable {
     @FXML
     private void testButtonAction(ActionEvent event) {
         List<ProcessDTO> findAll = ProcessDAO.findAll();
-        findAll.forEach(s -> System.out.println(s.getId() + ":"+s.getDivtime().toString()));
+        findAll.forEach(s -> System.out.println(s.getId() + ":"+TimestampUtil.formattedTimestamp(s.getDivtime())));
+        String TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
+
+ 
+        System.out.println(TimestampUtil.formattedTimestamp(TimestampUtil.current(), TIME_FORMAT));
 
     }
 
