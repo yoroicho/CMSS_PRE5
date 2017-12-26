@@ -73,7 +73,7 @@ public class ProcessDAO implements IDAO {
                     // OrdersDTOクラスのインスタンスを生成
                     ProcessDTO dto = new ProcessDTO();
                     // カラムの値をフィールドにセット
-                    dto.setId(result.getString("id"));
+                    dto.setId(result.getTimestamp("id"));
                     dto.setDivtime(result.getTimestamp("divtime"));
                     dto.setDivname(result.getString("divname"));
                     dto.setComment(result.getString("comment"));
@@ -94,5 +94,37 @@ public class ProcessDAO implements IDAO {
         }
         // DTOクラスのインスタンスのListを返す
         return processDTO;
+    }
+
+    public static void create(ProcessDTO processDTO) {
+
+        // 時計の誤差や海外時刻などで不用意に上書きしないようupdateは使わない。
+        String sql = "INSERT INTO process values (?,?,?,?,?,?,);";
+
+        // データベースへの接続
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                PreparedStatement statement = connection.prepareStatement(sql);) {
+            connection.setAutoCommit(false);
+            statement.setTimestamp(1, processDTO.getId());
+            statement.setTimestamp(2, processDTO.getDivtime());
+            statement.setString(3, processDTO.getDivname());
+            statement.setString(4, processDTO.getComment());
+            statement.setTimestamp(5, processDTO.getPredivtime());
+            statement.setString(6, processDTO.getArtifactsId());
+            statement.addBatch();
+            ResultSet result = statement.executeQuery();
+            try {
+                connection.commit();
+                System.out.println("追加成功");
+                
+            } catch (SQLException e) {
+                // connection.rollback(); 
+                e.printStackTrace();
+                System.out.println("追加失敗");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("データべース障害");
+        }
     }
 }

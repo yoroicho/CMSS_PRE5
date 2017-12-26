@@ -16,7 +16,7 @@ public class ProcessDTO {
     /**
      * フィールド変数
      */
-    private String id;
+    private Timestamp id;
     private Timestamp divtime;
     private String divname;
     private String comment;
@@ -26,14 +26,14 @@ public class ProcessDTO {
     /**
      * @return the id
      */
-    public String getId() {
+    public Timestamp getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(String id) {
+    public void setId(Timestamp id) {
         this.id = id;
     }
 
@@ -106,5 +106,7 @@ public class ProcessDTO {
     public void setArtifactsId(String artifactsId) {
         this.artifactsId = artifactsId;
     }
+
+
 
 }
