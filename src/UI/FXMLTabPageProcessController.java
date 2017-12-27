@@ -12,6 +12,7 @@ import common.TimestampUtil;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -37,13 +38,20 @@ public class FXMLTabPageProcessController implements Initializable {
     @FXML
     private TextField textFieldId;
     @FXML
+    private ComboBox<Timestamp> comboBoxDivTime;
+    @FXML
     private TextField textFieldArtifactsId;
     @FXML
     private TextArea textAreaDivName;
     @FXML
     private TextArea textAreaComment;
-    @FXML
-    private ComboBox<?> comboBoxDivTime;
+
+    private State state;
+    
+    private enum State {
+        // 下記は確定でない。
+        NEW_CREATE, DIV_FORK, UPDATE_RECORD, PEEK, DELETE
+    }
 
     private void initFocuseConditionForTask() { // 要改善最初に存在確認をしてから編集不可とすべき。
         this.textFieldId.focusedProperty().addListener(new ChangeListener<Boolean>() {
@@ -54,23 +62,9 @@ public class FXMLTabPageProcessController implements Initializable {
                     //textField_SHIP_ID.setEditable(true);
                     System.out.println("Textfield on focus");
                 } else {
-                    //textField_SHIP_ID.setEditable(false);
+                    
                     textFieldId.setDisable(true); // 編集不可になっていることが明確。ただし文字は見にくい。
                     System.out.println("Textfield out focus");
-                    /*
-                    ResultSet rs = DatabaseUty.getResultSetByKey("ship", "id", textField_SHIP_ID.getText().trim());
-                    try {
-                        rs.next();
-                        textField_SHIP_SERVICE.setText(rs.getString("SERVICE"));
-                        textArea_SHIP_NAME.setText(rs.getString("NAME"));
-                        textArea_SHIP_REMARK.setText(rs.getString("REMARK"));
-                        flgExsistShip = true;
-                    } catch (SQLException ex) {
-                        Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                        flgExsistShip = false;
-                        JOptionPane.showMessageDialog(null, "新規もしくはエラーです");
-                    }
-                     */
                 }
             }
         });
@@ -79,10 +73,9 @@ public class FXMLTabPageProcessController implements Initializable {
     @FXML
     private void testButtonAction(ActionEvent event) {
         List<ProcessDTO> findAll = ProcessDAO.findAll();
-        findAll.forEach(s -> System.out.println(s.getId() + ":"+TimestampUtil.formattedTimestamp(s.getDivtime())));
+        findAll.forEach(s -> System.out.println(s.getId() + ":" + TimestampUtil.formattedTimestamp(s.getDivtime())));
         String TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
 
- 
         System.out.println(TimestampUtil.formattedTimestamp(TimestampUtil.current(), TIME_FORMAT));
 
     }

@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,6 +97,48 @@ public class ProcessDAO implements IDAO {
         return processDTO;
     }
 
+    public static ProcessDTO findById(String idText) {
+        Timestamp id = Timestamp.valueOf(idText);
+        String sql = "SELECT * from process WHERE id = (?);";
+        // OrdersDTOクラスのインスタンスを生成
+        ProcessDTO dto = new ProcessDTO();
+        try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                PreparedStatement statement = connection.prepareStatement(sql);) {
+            connection.setAutoCommit(false);
+            statement.setTimestamp(1, id);
+            statement.addBatch();
+            System.out.println(statement.toString());
+
+            ResultSet result = statement.executeQuery();
+            System.out.println("検索：" + result.getFetchSize() + "件");
+
+            try {
+                connection.commit();
+                System.out.println("検索成功");
+                // データベースから取得した値がある間、
+                while (result.next()) {
+
+                    // カラムの値をフィールドにセット
+                    dto.setId(result.getTimestamp("id"));
+                    dto.setDivtime(result.getTimestamp("divtime"));
+                    dto.setDivname(result.getString("divname"));
+                    dto.setComment(result.getString("comment"));
+                    dto.setPredivtime(result.getTimestamp("predivtime"));
+                    dto.setArtifactsId(result.getString("artifactsid"));
+                    // while文で次のレコードの処理へ
+                }
+            } catch (SQLException e) {
+                // connection.rollback(); 
+                e.printStackTrace();
+                System.out.println("検索失敗");
+            }
+        } catch (SQLException e) {
+            System.out.println("データベース障害");
+            e.printStackTrace();
+        }
+        return dto;
+    }
+
     public static void create(ProcessDTO processDTO) {
 
         // 時計の誤差や海外時刻などで不用意に上書きしないようupdateは使わない。
@@ -116,7 +159,7 @@ public class ProcessDAO implements IDAO {
             try {
                 connection.commit();
                 System.out.println("追加成功");
-                
+
             } catch (SQLException e) {
                 // connection.rollback(); 
                 e.printStackTrace();
