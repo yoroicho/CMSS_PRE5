@@ -7,6 +7,7 @@ package common;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -18,13 +19,17 @@ import java.util.TimeZone;
 public class TimestampUtil {
 
     private static final String CMSS_DATE_FORMAT_PATTERN = "yyyyMMddHHmmss";
-    
+
+    public static Timestamp parseToTimestamp(String dateTime) throws ParseException {
+        return new Timestamp(new SimpleDateFormat(CMSS_DATE_FORMAT_PATTERN).parse(dateTime).getTime());
+    }
+
     public static String formattedTimestamp(Timestamp timestamp, String timeFormat) {
         return new SimpleDateFormat(timeFormat).format(timestamp);
     }
-    
-        public static String formattedTimestamp(Timestamp timestamp) {
-        return new SimpleDateFormat(CMSS_DATE_FORMAT_PATTERN ).format(timestamp);
+
+    public static String formattedTimestamp(Timestamp timestamp) {
+        return new SimpleDateFormat(CMSS_DATE_FORMAT_PATTERN).format(timestamp);
     }
 
     public static Timestamp current() {

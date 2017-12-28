@@ -5,6 +5,7 @@
  */
 package DB;
 
+import common.TimestampUtil;
 import java.sql.Timestamp;
 
 /**
@@ -107,6 +108,9 @@ public class ProcessDTO {
         this.artifactsId = artifactsId;
     }
 
-
+ @Override
+    public String toString(){
+        return TimestampUtil.formattedTimestamp(id)+TimestampUtil.formattedTimestamp(divtime);
+    }
 
 }

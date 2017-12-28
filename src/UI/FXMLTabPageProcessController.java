@@ -13,6 +13,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -38,7 +39,7 @@ public class FXMLTabPageProcessController implements Initializable {
     @FXML
     private TextField textFieldId;
     @FXML
-    private ComboBox<Timestamp> comboBoxDivTime;
+    private ComboBox<ProcessDTO> comboBoxDivTime;
     @FXML
     private TextField textFieldArtifactsId;
     @FXML
@@ -47,7 +48,7 @@ public class FXMLTabPageProcessController implements Initializable {
     private TextArea textAreaComment;
 
     private State state;
-    
+
     private enum State {
         // 下記は確定でない。
         NEW_CREATE, DIV_FORK, UPDATE_RECORD, PEEK, DELETE
@@ -59,10 +60,27 @@ public class FXMLTabPageProcessController implements Initializable {
             public void changed(ObservableValue<? extends Boolean> arg0,
                     Boolean oldPropertyValue, Boolean newPropertyValue) {
                 if (newPropertyValue) {
-                    //textField_SHIP_ID.setEditable(true);
+                    textFieldId.setEditable(true);
                     System.out.println("Textfield on focus");
                 } else {
-                    
+                    // 入力されているidが存在するか。
+                    if (textFieldId.getText() != null) {
+                        try {
+                            // 何か入力されている。
+                            List<ProcessDTO> processList = ProcessDAO.findById(
+                                    TimestampUtil.parseToTimestamp(textFieldId.getText()));
+                            if (processList.isEmpty()) { // 存在しない。
+                                System.out.println("ID ERROR");
+                                textFieldId.requestFocus();
+                            } else {                       // 存在する。
+                                // コンボボックスに入れ込み。                                     
+                                comboBoxDivTime.getItems().addAll(processList);
+
+                            }
+                        } catch (ParseException ex) {
+                            Logger.getLogger(FXMLTabPageProcessController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                     textFieldId.setDisable(true); // 編集不可になっていることが明確。ただし文字は見にくい。
                     System.out.println("Textfield out focus");
                 }

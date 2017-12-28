@@ -97,11 +97,11 @@ public class ProcessDAO implements IDAO {
         return processDTO;
     }
 
-    public static ProcessDTO findById(String idText) {
-        Timestamp id = Timestamp.valueOf(idText);
+    public static List<ProcessDTO> findById(Timestamp id) {
+        //Timestamp id = Timestamp.valueOf(idText);
         String sql = "SELECT * from process WHERE id = (?);";
-        // OrdersDTOクラスのインスタンスを生成
-        ProcessDTO dto = new ProcessDTO();
+        // DTOクラスのインスタンス格納用
+        List<ProcessDTO> processDTO = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
                 PreparedStatement statement = connection.prepareStatement(sql);) {
             connection.setAutoCommit(false);
@@ -117,7 +117,8 @@ public class ProcessDAO implements IDAO {
                 System.out.println("検索成功");
                 // データベースから取得した値がある間、
                 while (result.next()) {
-
+                    // OrdersDTOクラスのインスタンスを生成
+                    ProcessDTO dto = new ProcessDTO();
                     // カラムの値をフィールドにセット
                     dto.setId(result.getTimestamp("id"));
                     dto.setDivtime(result.getTimestamp("divtime"));
@@ -125,6 +126,8 @@ public class ProcessDAO implements IDAO {
                     dto.setComment(result.getString("comment"));
                     dto.setPredivtime(result.getTimestamp("predivtime"));
                     dto.setArtifactsId(result.getString("artifactsid"));
+                    // インスタンスをListに格納
+                    processDTO.add(dto);
                     // while文で次のレコードの処理へ
                 }
             } catch (SQLException e) {
@@ -136,7 +139,7 @@ public class ProcessDAO implements IDAO {
             System.out.println("データベース障害");
             e.printStackTrace();
         }
-        return dto;
+        return processDTO;
     }
 
     public static void create(ProcessDTO processDTO) {
