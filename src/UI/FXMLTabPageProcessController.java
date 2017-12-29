@@ -27,6 +27,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javax.swing.JOptionPane;
 
 /**
@@ -46,6 +47,9 @@ public class FXMLTabPageProcessController implements Initializable {
     private TextArea textAreaDivName;
     @FXML
     private TextArea textAreaComment;
+
+    @FXML
+     AnchorPane anchorPaneTabPageProcess;
 
     private State state;
 
@@ -103,7 +107,7 @@ public class FXMLTabPageProcessController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        initFocuseConditionForTask(); // 主キーを保護する為にロックするイベントを登録。
+        initFocuseConditionForTask(); // 主キーを保護する為にロックするイベントを登録。       
     }
 
 }
