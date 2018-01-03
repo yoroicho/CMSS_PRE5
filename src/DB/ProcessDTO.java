@@ -20,6 +20,7 @@ public class ProcessDTO {
     private Timestamp id;
     private Timestamp divtime;
     private String divname;
+    private Timestamp cutdatetime;
     private String comment;
     private Timestamp predivtime;
     private String artifactsId;
@@ -67,6 +68,20 @@ public class ProcessDTO {
     }
 
     /**
+     * @return the cutdatetime
+     */
+    public Timestamp getCutdatetime() {
+        return cutdatetime;
+    }
+
+    /**
+     * @param cutdatetime the cutdatetime to set
+     */
+    public void setCutdatetime(Timestamp cutdatetime) {
+        this.cutdatetime = cutdatetime;
+    }
+
+    /**
      * @return the comment
      */
     public String getComment() {
@@ -108,9 +123,8 @@ public class ProcessDTO {
         this.artifactsId = artifactsId;
     }
 
- @Override
-    public String toString(){
-        return TimestampUtil.formattedTimestamp(id)+TimestampUtil.formattedTimestamp(divtime);
+        @Override
+    public String toString() {
+        return TimestampUtil.formattedTimestamp(getCutdatetime())+getDivname()+ TimestampUtil.formattedTimestamp(getId()) + TimestampUtil.formattedTimestamp(getDivtime());
     }
-
 }
