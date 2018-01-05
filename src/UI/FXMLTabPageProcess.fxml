@@ -29,6 +29,8 @@
                         <Button fx:id="buttonNewArtifacts" layoutX="517.0" layoutY="133.0" mnemonicParsing="false" text="N/A" />
                         <Button fx:id="buttonEnter" layoutX="517.0" layoutY="419.0" mnemonicParsing="false" text="ENTER" />
                         <Button fx:id="testButton" layoutX="510.0" layoutY="30.0" mnemonicParsing="false" onAction="#testButtonAction" text="test" />
+                  <DatePicker layoutX="86.0" layoutY="405.0" />
+                  <ComboBox fx:id="comboBoxIdDiv" editable="true" layoutX="11.0" layoutY="106.0" prefHeight="28.0" prefWidth="476.0" />
                     </children>
                 </AnchorPane>
             </content>

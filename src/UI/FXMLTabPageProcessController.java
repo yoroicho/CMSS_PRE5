@@ -38,6 +38,8 @@ import javax.swing.JOptionPane;
 public class FXMLTabPageProcessController implements Initializable {
 
     @FXML
+    private ComboBox<ProcessDTO> comboBoxIdDiv;
+    @FXML
     private TextField textFieldId;
     @FXML
     private ComboBox<ProcessDTO> comboBoxDivTime;
@@ -49,13 +51,45 @@ public class FXMLTabPageProcessController implements Initializable {
     private TextArea textAreaComment;
 
     @FXML
-     AnchorPane anchorPaneTabPageProcess;
+    AnchorPane anchorPaneTabPageProcess;
 
     private State state;
 
     private enum State {
         // 下記は確定でない。
         NEW_CREATE, DIV_FORK, UPDATE_RECORD, PEEK, DELETE
+    }
+
+    private void comboBoxIdDivRead() {
+        this.comboBoxIdDiv.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0,
+                    Boolean oldPropertyValue, Boolean newPropertyValue) {
+                if (newPropertyValue) {
+                    System.out.println("Textfield on focus");
+                } else {
+                    if (comboBoxIdDiv.getEditor().getText() != null) {
+                        System.out.println("PromptText is " + comboBoxIdDiv.getEditor().getText());
+                        // 入力されているidが存在するか。
+                        try {
+                            // 何か入力されている。
+                            List<ProcessDTO> processList = ProcessDAO.findById(
+                                    TimestampUtil.parseToTimestamp(comboBoxIdDiv.getEditor().getText()));
+                            if (processList.isEmpty()) { // 存在しない。
+                                System.out.println("ID ERROR");
+                                textFieldId.requestFocus();
+                            } else {                       // 存在する。
+                                // コンボボックスに入れ込み。                                     
+                                comboBoxDivTime.getItems().addAll(processList);
+
+                            }
+                        } catch (ParseException ex) {
+                            Logger.getLogger(FXMLTabPageProcessController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void initFocuseConditionForTask() { // 要改善最初に存在確認をしてから編集不可とすべき。
@@ -87,6 +121,7 @@ public class FXMLTabPageProcessController implements Initializable {
                     }
                     textFieldId.setDisable(true); // 編集不可になっていることが明確。ただし文字は見にくい。
                     System.out.println("Textfield out focus");
+
                 }
             }
         });
@@ -107,7 +142,11 @@ public class FXMLTabPageProcessController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        initFocuseConditionForTask(); // 主キーを保護する為にロックするイベントを登録。       
+            // コンボボックスに入れ込み。                                     
+        comboBoxIdDiv.getItems().addAll(ProcessDAO.findAll());
+        initFocuseConditionForTask(); // 主キーを保護する為にロックするイベントを登録。
+        comboBoxIdDivRead(); // 直入力と選択変更との各々の処理。
+    
     }
 
 }
