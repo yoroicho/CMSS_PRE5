@@ -17,12 +17,40 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author tokyo
  */
 public class ProcessDAO implements IDAO {
+
+    private static List<ProcessDTO> resurtToDTO(ResultSet result) {
+        // DTOクラスのインスタンス格納用
+        List<ProcessDTO> processDTO = new ArrayList<>();
+        try {
+            while (result.next()) {
+                // OrdersDTOクラスのインスタンスを生成
+                ProcessDTO dto = new ProcessDTO();
+                // カラムの値をフィールドにセット
+                dto.setId(result.getTimestamp("id"));
+                dto.setDivtime(result.getTimestamp("divtime"));
+                dto.setDivname(result.getString("divname"));
+                dto.setCutdatetime(result.getTimestamp("cutdatetime"));
+                dto.setComment(result.getString("comment"));
+                dto.setPredivtime(result.getTimestamp("predivtime"));
+                dto.setArtifactsId(result.getString("artifactsid"));
+                dto.setClosedatetime(result.getTimestamp("closedatetime"));
+                // インスタンスをListに格納
+                processDTO.add(dto);
+                // while文で次のレコードの処理へ
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProcessDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return processDTO;
+    }
 
     public static ResultSet getResultSetByKey(String tableName, String keyName, String id) {
         String sql = "SELECT * from " + tableName + " WHERE " + keyName + " = (?);";
@@ -69,21 +97,7 @@ public class ProcessDAO implements IDAO {
             try {
                 connection.commit();
                 System.out.println("検索成功");
-                // データベースから取得した値がある間、
-                while (result.next()) {
-                    // OrdersDTOクラスのインスタンスを生成
-                    ProcessDTO dto = new ProcessDTO();
-                    // カラムの値をフィールドにセット
-                    dto.setId(result.getTimestamp("id"));
-                    dto.setDivtime(result.getTimestamp("divtime"));
-                    dto.setDivname(result.getString("divname"));
-                    dto.setComment(result.getString("comment"));
-                    dto.setPredivtime(result.getTimestamp("predivtime"));
-                    dto.setArtifactsId(result.getString("artifactsid"));
-                    // インスタンスをListに格納
-                    processDTO.add(dto);
-                    // while文で次のレコードの処理へ
-                }
+                processDTO = resurtToDTO(result);
             } catch (SQLException e) {
                 // connection.rollback(); 
                 e.printStackTrace();
@@ -115,21 +129,7 @@ public class ProcessDAO implements IDAO {
             try {
                 connection.commit();
                 System.out.println("検索成功");
-                // データベースから取得した値がある間、
-                while (result.next()) {
-                    // OrdersDTOクラスのインスタンスを生成
-                    ProcessDTO dto = new ProcessDTO();
-                    // カラムの値をフィールドにセット
-                    dto.setId(result.getTimestamp("id"));
-                    dto.setDivtime(result.getTimestamp("divtime"));
-                    dto.setDivname(result.getString("divname"));
-                    dto.setComment(result.getString("comment"));
-                    dto.setPredivtime(result.getTimestamp("predivtime"));
-                    dto.setArtifactsId(result.getString("artifactsid"));
-                    // インスタンスをListに格納
-                    processDTO.add(dto);
-                    // while文で次のレコードの処理へ
-                }
+                processDTO = resurtToDTO(result);
             } catch (SQLException e) {
                 // connection.rollback(); 
                 e.printStackTrace();
@@ -145,7 +145,7 @@ public class ProcessDAO implements IDAO {
     public static void create(ProcessDTO processDTO) {
 
         // 時計の誤差や海外時刻などで不用意に上書きしないようupdateは使わない。
-        String sql = "INSERT INTO process values (?,?,?,?,?,?,);";
+        String sql = "INSERT INTO process values (?,?,?,?,?,?,?,?);";
 
         // データベースへの接続
         try (Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -154,9 +154,11 @@ public class ProcessDAO implements IDAO {
             statement.setTimestamp(1, processDTO.getId());
             statement.setTimestamp(2, processDTO.getDivtime());
             statement.setString(3, processDTO.getDivname());
-            statement.setString(4, processDTO.getComment());
-            statement.setTimestamp(5, processDTO.getPredivtime());
-            statement.setString(6, processDTO.getArtifactsId());
+            statement.setTimestamp(4, processDTO.getCutdatetime());
+            statement.setString(5, processDTO.getComment());
+            statement.setTimestamp(6, processDTO.getPredivtime());
+            statement.setString(7, processDTO.getArtifactsId());
+            statement.setTimestamp(8, processDTO.getClosedatetime());
             statement.addBatch();
             ResultSet result = statement.executeQuery();
             try {

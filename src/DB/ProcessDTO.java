@@ -24,6 +24,7 @@ public class ProcessDTO {
     private String comment;
     private Timestamp predivtime;
     private String artifactsId;
+    private Timestamp closedatetime;
 
     /**
      * @return the id
@@ -123,8 +124,24 @@ public class ProcessDTO {
         this.artifactsId = artifactsId;
     }
 
+       /**
+     * @return the closedatetime
+     */
+    public Timestamp getClosedatetime() {
+        return closedatetime;
+    }
+
+    /**
+     * @param closedatetime the closedatetime to set
+     */
+    public void setClosedatetime(Timestamp closedatetime) {
+        this.closedatetime = closedatetime;
+    }
+    
         @Override
     public String toString() {
         return TimestampUtil.formattedTimestamp(getCutdatetime())+getDivname()+ TimestampUtil.formattedTimestamp(getId()) + TimestampUtil.formattedTimestamp(getDivtime());
     }
+
+ 
 }
